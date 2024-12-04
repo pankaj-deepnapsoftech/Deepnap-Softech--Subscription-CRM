@@ -50,7 +50,9 @@ const LeadsDetailsDrawer = ({ dataId: id, closeDrawerHandler }) => {
         assignedPhone: data.lead?.assigned?.phone || "N/A",
         assignedEmail: data.lead?.assigned?.email || "N/A",
         followupDate: data.lead?.followup_date,
-        followupReason: data.lead?.followup_reason
+        followupReason: data.lead?.followup_reason,
+        prcQt: data.lead?.prc_qt || 'N/A',
+        location: data.lead?.location || 'N/A'
       });
 
       setIsLoading(false);
@@ -195,6 +197,14 @@ const LeadsDetailsDrawer = ({ dataId: id, closeDrawerHandler }) => {
             {details?.assignedName !== "N/A" && <div className="mt-3 mb-5 font-bold">
               <p>Assigned To (Email)</p>
               <p className="font-normal">{details?.assignedEmail}</p>
+            </div>}
+            {details?.prcQt !== "N/A" && <div className="mt-3 mb-5 font-bold">
+              <p>PRC QT</p>
+              <p className="font-normal">{details?.prcQt}</p>
+            </div>}
+            {details?.location !== "N/A" && <div className="mt-3 mb-5 font-bold">
+              <p>Location</p>
+              <p className="font-normal">{details?.location}</p>
             </div>}
           </div>
         )}

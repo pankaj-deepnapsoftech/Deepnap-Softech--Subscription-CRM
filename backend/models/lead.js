@@ -78,6 +78,12 @@ const leadSchema = mongoose.Schema(
     followup_reason: {
       type: String,
     },
+    location: {
+      type: String,
+    },
+    prc_qt: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

@@ -94,6 +94,14 @@ const columns = [
     Header: "Email",
     accessor: "email",
   },
+  {
+    Header: "Location",
+    accessor: "location",
+  },
+  {
+    Header: "PRC QT",
+    accessor: "prc_qt",
+  },
 ];
 
 const AssignedLeads = () => {

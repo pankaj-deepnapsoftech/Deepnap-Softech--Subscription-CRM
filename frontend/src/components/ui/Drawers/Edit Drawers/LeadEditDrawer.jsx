@@ -16,9 +16,16 @@ import Select from "react-select";
 import Loading from "../../Loading";
 import { notificationContext } from "../../../ctx/notificationContext";
 
-const LeadEditDrawer = ({ dataId: id, closeDrawerHandler, fetchAllLeads, fetchLeadSummary }) => {
+const LeadEditDrawer = ({
+  dataId: id,
+  closeDrawerHandler,
+  fetchAllLeads,
+  fetchLeadSummary,
+}) => {
   const [companies, setCompanies] = useState([]);
   const [peoples, setPeoples] = useState([]);
+  const [prcQt, setPrcQt] = useState();
+  const [location, setLocation] = useState();
 
   const [showSelectPeoples, setShowSelectPeoples] = useState(true);
   const [showSelectCompanies, setShowSelectCompanies] = useState(true);
@@ -136,7 +143,10 @@ const LeadEditDrawer = ({ dataId: id, closeDrawerHandler, fetchAllLeads, fetchLe
       toast.error("Employee not assigned");
       return;
     }
-    if (statusId?.value === "Follow Up" && (!followupDate || !followupReason || followupReason === '')) {
+    if (
+      statusId?.value === "Follow Up" &&
+      (!followupDate || !followupReason || followupReason === "")
+    ) {
       toast.error("Follow-up date and Follow-up reason required");
       return;
     }
@@ -154,6 +164,8 @@ const LeadEditDrawer = ({ dataId: id, closeDrawerHandler, fetchAllLeads, fetchLe
         source: sourceId?.value,
         notes,
         assigned: assigned?.value,
+        prc_qt: prcQt,
+        location: location
       });
     } else if (
       statusId?.value === "Follow Up" &&
@@ -168,6 +180,8 @@ const LeadEditDrawer = ({ dataId: id, closeDrawerHandler, fetchAllLeads, fetchLe
         assigned: assigned?.value,
         followup_date: followupDate,
         followup_reason: followupReason,
+        prc_qt: prcQt,
+        location: location
       });
     } else {
       body = JSON.stringify({
@@ -176,6 +190,8 @@ const LeadEditDrawer = ({ dataId: id, closeDrawerHandler, fetchAllLeads, fetchLe
         source: sourceId?.value,
         notes,
         assigned: undefined,
+        prc_qt: prcQt,
+        location: location
       });
     }
 
@@ -242,6 +258,8 @@ const LeadEditDrawer = ({ dataId: id, closeDrawerHandler, fetchAllLeads, fetchLe
         );
       }
       setFollowupReason(data.lead?.followup_reason);
+      setPrcQt(data.lead?.prc_qt);
+      setLocation(data.lead?.location);
 
       setIsLoading(false);
       toast.success(data.message);
@@ -355,13 +373,13 @@ const LeadEditDrawer = ({ dataId: id, closeDrawerHandler, fetchAllLeads, fetchLe
               />
             </div>
 
-            {statusId?.value === 'Follow Up' && <>
+            {statusId?.value === "Follow Up" && (
+              <>
                 <div className="mt-2 mb-5">
                   <label className="font-bold">Follow-up Date</label>
                   <Input
                     type="date"
                     value={followupDate}
-                    min={new Date().toISOString().substring(0, 10)}
                     onChange={(e) => setFollowupDate(e.target.value)}
                   />
                 </div>
@@ -375,7 +393,7 @@ const LeadEditDrawer = ({ dataId: id, closeDrawerHandler, fetchAllLeads, fetchLe
                   />
                 </div>
               </>
-            }
+            )}
 
             {/* {(showSelectPeoples || !typeId) && (
               <div className="mt-2 mb-5">
@@ -425,6 +443,22 @@ const LeadEditDrawer = ({ dataId: id, closeDrawerHandler, fetchAllLeads, fetchLe
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 resize="none"
+              />
+            </FormControl>
+            <FormControl className="mt-2 mb-5">
+              <FormLabel fontWeight="bold">PRC QT</FormLabel>
+              <Input
+                type="text"
+                value={prcQt}
+                onChange={(e) => setPrcQt(e.target.value)}
+              />
+            </FormControl>
+            <FormControl className="mt-2 mb-5">
+              <FormLabel fontWeight="bold">Location</FormLabel>
+              <Input
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
               />
             </FormControl>
             <Button

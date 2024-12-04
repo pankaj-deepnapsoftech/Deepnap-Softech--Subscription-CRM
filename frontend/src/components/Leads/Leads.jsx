@@ -118,6 +118,14 @@ const columns = [
     Header: "Email",
     accessor: "email",
   },
+  {
+    Header: "Location",
+    accessor: "location",
+  },
+  {
+    Header: "PRC QT",
+    accessor: "prc_qt",
+  },
 ];
 
 const Leads = () => {
@@ -133,6 +141,8 @@ const Leads = () => {
   const [leadSummaryData, setLeadSummaryData] = useState([]);
   const [leadSummaryLabels, setLeadSummaryLabels] = useState([]);
   const [leadSummaryBG, setLeadSummaryBG] = useState([]);
+
+  const [isAllSelected, setIsAllSelected] = useState(false);
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -276,8 +286,8 @@ const Leads = () => {
         throw new Error(data.message);
       }
 
-      const bulkSMSMobilesArr = data.leads.map((data) => data?.phone);
-      setBulkSMSMobiles(bulkSMSMobilesArr);
+      // const bulkSMSMobilesArr = data.leads.map((data) => data?.phone);
+      // setBulkSMSMobiles(bulkSMSMobilesArr);
 
       setData(data.leads);
       setFilteredData(data.leads);
@@ -373,6 +383,15 @@ const Leads = () => {
     }
   };
 
+  const selectAllHandler = ()=>{
+    const rows = document.getElementsByName("select");
+    const select = !isAllSelected;
+    Array.from(rows).forEach((e) => {
+      e.checked = select;
+    });
+    setIsAllSelected(prev => !prev);
+  }
+
   const bulkAssignHandler = async (e) => {
     const rows = document.getElementsByName("select");
     const selectedRows = Array.from(rows).filter((e) => e.checked);
@@ -383,6 +402,32 @@ const Leads = () => {
     const selectedRowIds = selectedRows.map((e) => e.value);
     setSelected(selectedRowIds);
     dispatch(openShowBulkAssignDrawer());
+  };
+
+  const bulkDownloadHandler = async (e) => {
+    fetch(baseURL + "lead/bulk-download", {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${cookies?.access_token}`,
+      },
+    })
+      .then((response) => {
+        const filename = response.headers
+          .get("content-disposition")
+          .split("filename=")[1]
+          .replace(/"/g, "");
+        return response.blob().then((blob) => ({ filename, blob }));
+      })
+      .then(({ filename, blob }) => {
+        var a = document.createElement("a");
+        a.href = window.URL.createObjectURL(blob);
+        a.download = filename;
+        a.click();
+        a.remove();
+      })
+      .catch((err) => {
+        toast.error(err?.message || "Something went wrong");
+      });
   };
 
   const addLeadsHandler = () => {
@@ -502,12 +547,12 @@ const Leads = () => {
               ?.includes(searchKey.replaceAll("/", ""))) ||
           d?.email?.toLowerCase().includes(searchKey.toLowerCase())
       );
-      const bulkSMSMobilesArr = searchedData.map((data) => data?.phone);
-      setBulkSMSMobiles(bulkSMSMobilesArr);
+      // const bulkSMSMobilesArr = searchedData.map((data) => data?.phone);
+      // setBulkSMSMobiles(bulkSMSMobilesArr);
       setFilteredData(searchedData);
     } else {
-      const bulkSMSMobilesArr = data.map((data) => data?.phone);
-      setBulkSMSMobiles(bulkSMSMobilesArr);
+      // const bulkSMSMobilesArr = data.map((data) => data?.phone);
+      // setBulkSMSMobiles(bulkSMSMobilesArr);
       setFilteredData(data);
     }
   }, [searchKey, data]);
@@ -580,7 +625,7 @@ const Leads = () => {
           </>
           <div className="h-[85vh] overflow-auto">
             {/* <div className="flex flex-col items-start justify-start lg:flex-row gap-y-1 md:justify-between md:items-center mb-8"> */}
-            <div className="flex flex-col items-start justify-start gap-y-1 md:justify-between mb-4 sticky top-0 bg-white pb-2 z-10">
+            <div className="flex flex-col items-start justify-start gap-y-1 md:justify-between mb-4 sticky top-0 pb-2 z-10">
               <div className="w-full flex text-lg lg:text-xl justify-between font-semibold lg:items-center gap-y-1 mb-2">
                 {/* <span className="mr-2">
                   <MdArrowBack />
@@ -620,6 +665,18 @@ const Leads = () => {
                   paddingX={{ base: "10px", md: "12px" }}
                   paddingY={{ base: "0", md: "3px" }}
                   width={{ base: "-webkit-fill-available", md: 130 }}
+                  onClick={selectAllHandler}
+                  color="#ffffff"
+                  backgroundColor="#1640d6"
+                  borderColor="#1640d6"
+                >
+                  {isAllSelected ? 'Unselect All' : 'Select All'}
+                </Button>
+                <Button
+                  fontSize={{ base: "14px", md: "14px" }}
+                  paddingX={{ base: "10px", md: "12px" }}
+                  paddingY={{ base: "0", md: "3px" }}
+                  width={{ base: "-webkit-fill-available", md: 130 }}
                   onClick={() => {
                     dispatch(openSendSMSDrawer());
                   }}
@@ -645,6 +702,23 @@ const Leads = () => {
                 >
                   Bulk Assign
                 </Button>
+                {role === "Super Admin" && (
+                  <Button
+                    fontSize={{ base: "14px", md: "14px" }}
+                    paddingX={{ base: "10px", md: "12px" }}
+                    paddingY={{ base: "0", md: "3px" }}
+                    width={{ base: "-webkit-fill-available", md: 150 }}
+                    onClick={() => {
+                      bulkDownloadHandler();
+                    }}
+                    rightIcon={<FaFileCsv size={28} />}
+                    color="#ffffff"
+                    backgroundColor="#1640d6"
+                    borderColor="#1640d6"
+                  >
+                    Bulk Download
+                  </Button>
+                )}
                 <div>
                   <Button
                     fontSize={{ base: "14px", md: "14px" }}
@@ -740,6 +814,7 @@ const Leads = () => {
                   <option value={20}>20</option>
                   <option value={50}>50</option>
                   <option value={100}>100</option>
+                  <option value={100000}>All</option>
                 </Select>
               </div>
             </div>
@@ -844,10 +919,19 @@ const Leads = () => {
                 <div>
                   <TableContainer maxHeight="600px" overflowY="auto">
                     <Table variant="simple" {...getTableProps()}>
-                      <Thead position="sticky" top={0} zIndex={1} bg="teal.500" className="text-lg font-semibold">
+                      <Thead
+                        position="sticky"
+                        top={0}
+                        zIndex={1}
+                        bg="teal.500"
+                        className="text-lg font-semibold"
+                      >
                         {headerGroups.map((hg) => {
                           return (
-                            <Tr className="bg-white" {...hg.getHeaderGroupProps()}>
+                            <Tr
+                              className="bg-white"
+                              {...hg.getHeaderGroupProps()}
+                            >
                               {hg.headers.map((column) => {
                                 return (
                                   <Th

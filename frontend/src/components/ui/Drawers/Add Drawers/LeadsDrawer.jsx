@@ -17,12 +17,18 @@ import { useCookies } from "react-cookie";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 
-const LeadsDrawer = ({ fetchAllLeads, closeDrawerHandler, fetchLeadSummary }) => {
+const LeadsDrawer = ({
+  fetchAllLeads,
+  closeDrawerHandler,
+  fetchLeadSummary,
+}) => {
   const [cookies] = useCookies();
   const [companies, setCompanies] = useState([]);
   const [peoples, setPeoples] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [products, setProducts] = useState([]);
+  const [prcQt, setPrcQt] = useState();
+  const [location, setLocation] = useState();
 
   const [productOptionsList, setProductOptionsList] = useState();
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -190,7 +196,10 @@ const LeadsDrawer = ({ fetchAllLeads, closeDrawerHandler, fetchLeadSummary }) =>
       toast.error("Atleast 1 product should be selected");
       return;
     }
-    if (statusId?.value === "Follow Up" && (!followupDate || !followupReason || followupReason === '')) {
+    if (
+      statusId?.value === "Follow Up" &&
+      (!followupDate || !followupReason || followupReason === "")
+    ) {
       toast.error("Follow-up date and Follow-up reason required");
       return;
     }
@@ -211,6 +220,8 @@ const LeadsDrawer = ({ fetchAllLeads, closeDrawerHandler, fetchLeadSummary }) =>
         products: productsId,
         notes,
         assigned: assigned?.value,
+        prc_qt: prcQt,
+        location: location,
       });
     } else if (
       statusId?.value === "Follow Up" &&
@@ -228,6 +239,8 @@ const LeadsDrawer = ({ fetchAllLeads, closeDrawerHandler, fetchLeadSummary }) =>
         assigned: assigned?.value,
         followup_date: followupDate,
         followup_reason: followupReason,
+        prc_qt: prcQt,
+        location: location,
       });
     } else {
       body = JSON.stringify({
@@ -238,6 +251,8 @@ const LeadsDrawer = ({ fetchAllLeads, closeDrawerHandler, fetchLeadSummary }) =>
         companyId: companyId?.value,
         products: productsId,
         notes,
+        prc_qt: prcQt,
+        location: location,
       });
     }
 
@@ -281,7 +296,7 @@ const LeadsDrawer = ({ fetchAllLeads, closeDrawerHandler, fetchLeadSummary }) =>
       peoples.map((data) => {
         return {
           value: data._id,
-          label: data?.firstname + " " + (data?.lastname || ''),
+          label: data?.firstname + " " + (data?.lastname || ""),
         };
       })
     );
@@ -496,6 +511,22 @@ const LeadsDrawer = ({ fetchAllLeads, closeDrawerHandler, fetchLeadSummary }) =>
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               resize="none"
+            />
+          </FormControl>
+          <FormControl className="mt-2 mb-5">
+            <FormLabel fontWeight="bold">PRC QT</FormLabel>
+            <Input
+              type="text"
+              value={prcQt}
+              onChange={(e) => setPrcQt(e.target.value)}
+            />
+          </FormControl>
+          <FormControl className="mt-2 mb-5">
+            <FormLabel fontWeight="bold">Location</FormLabel>
+            <Input
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
             />
           </FormControl>
           <Button

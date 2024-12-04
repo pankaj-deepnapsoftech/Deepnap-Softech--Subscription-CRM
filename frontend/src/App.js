@@ -77,6 +77,10 @@ function App() {
             <Route path="corporates" element={<Companies />} />
             <Route path="leads" element={<Leads />} />
             <Route path="indiamart-leads" element={<IndiamartLeads />} />
+            <Route path="justdial-leads" element={<IndiamartLeads />} />
+            <Route path="facebook-leads" element={<IndiamartLeads />} />
+            <Route path="instagram-leads" element={<IndiamartLeads />} />
+            <Route path="google-leads" element={<IndiamartLeads />} />
             <Route path="assigned-leads" element={<AssignedLeads />} />
             <Route path="offers" element={<Offers />} />
             <Route path="invoices" element={<Invoices />} />

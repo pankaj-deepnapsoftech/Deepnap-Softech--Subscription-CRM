@@ -10,6 +10,8 @@ const adminModel = require("../../models/admin");
 const mongoose = require("mongoose");
 const supportModel = require("../../models/support");
 const indiamartLeadModel = require("../../models/indiamart_lead");
+const peopleModel = require("../../models/people");
+const companyModel = require("../../models/company");
 
 const invoiceSummary = TryCatch(async (req, res) => {
   const { fromDate: from, toDate: to, employee } = req.body;
@@ -18,16 +20,19 @@ const invoiceSummary = TryCatch(async (req, res) => {
     throw new Error("Missing required date fields", 400);
   }
 
-  const query = { organization:  new mongoose.Types.ObjectId(req.user.organization) };
+  const query = {
+    organization: new mongoose.Types.ObjectId(req.user.organization),
+  };
   if (req.user.role !== "Super Admin") {
     query.creator = new mongoose.Types.ObjectId(req.user.id);
-  }
-  else {
+  } else {
     if (employee) {
       const isExistingEmployee = await adminModel.findOne({ email: employee });
       if (isExistingEmployee) {
         query.creator = new mongoose.Types.ObjectId(isExistingEmployee._id);
-        query.organization = new mongoose.Types.ObjectId(isExistingEmployee.organization);
+        query.organization = new mongoose.Types.ObjectId(
+          isExistingEmployee.organization
+        );
       }
     }
   }
@@ -86,7 +91,7 @@ const invoiceSummary = TryCatch(async (req, res) => {
           $gte: new Date(from),
         },
         ...query,
-        },
+      },
     },
     {
       $project: {
@@ -139,7 +144,7 @@ const invoiceSummary = TryCatch(async (req, res) => {
     }
   });
 
-  const totalInvoices = await invoiceModel.find({...query}).countDocuments();
+  const totalInvoices = await invoiceModel.find({ ...query }).countDocuments();
 
   res.status(200).json({
     status: 200,
@@ -158,16 +163,19 @@ const offerSummary = TryCatch(async (req, res) => {
     throw new Error("Missing required date fields", 400);
   }
 
-  const query = { organization:  new mongoose.Types.ObjectId(req.user.organization) };
+  const query = {
+    organization: new mongoose.Types.ObjectId(req.user.organization),
+  };
   if (req.user.role !== "Super Admin") {
     query.creator = new mongoose.Types.ObjectId(req.user.id);
-  }
-  else {
+  } else {
     if (employee) {
       const isExistingEmployee = await adminModel.findOne({ email: employee });
       if (isExistingEmployee) {
         query.creator = new mongoose.Types.ObjectId(isExistingEmployee._id);
-        query.organization = new mongoose.Types.ObjectId(isExistingEmployee.organization);
+        query.organization = new mongoose.Types.ObjectId(
+          isExistingEmployee.organization
+        );
       }
     }
   }
@@ -183,7 +191,7 @@ const offerSummary = TryCatch(async (req, res) => {
           $gte: new Date(from),
         },
         // creator: query?.creator || { $exists: true },
-        ...query
+        ...query,
       },
     },
     {
@@ -232,11 +240,12 @@ const proformaInvoiceSummary = TryCatch(async (req, res) => {
     throw new Error("Missing required date fields", 400);
   }
 
-  const query = { organization:  new mongoose.Types.ObjectId(req.user.organization) };
+  const query = {
+    organization: new mongoose.Types.ObjectId(req.user.organization),
+  };
   if (req.user.role !== "Super Admin") {
     query.creator = new mongoose.Types.ObjectId(req.user.id);
-  }
-  else {
+  } else {
     if (employee) {
       const isExistingEmployee = await adminModel.findOne({ email: employee });
       if (isExistingEmployee) {
@@ -259,7 +268,7 @@ const proformaInvoiceSummary = TryCatch(async (req, res) => {
           $gte: new Date(from),
         },
         // creator: query?.creator || { $exists: true },
-        ...query
+        ...query,
       },
     },
     {
@@ -302,12 +311,13 @@ const proformaInvoiceSummary = TryCatch(async (req, res) => {
 });
 
 const customerSummary = TryCatch(async (req, res) => {
-  const {employee} = req.body;
-  const query = { organization:  new mongoose.Types.ObjectId(req.user.organization) };
+  const { employee } = req.body;
+  const query = {
+    organization: new mongoose.Types.ObjectId(req.user.organization),
+  };
   if (req.user.role !== "Super Admin") {
     query.creator = new mongoose.Types.ObjectId(req.user.id);
-  }
-  else {
+  } else {
     if (employee) {
       const isExistingEmployee = await adminModel.findOne({ email: employee });
       if (isExistingEmployee) {
@@ -332,11 +342,12 @@ const amountSummary = TryCatch(async (req, res) => {
     throw new Error("Missing required date fields", 400);
   }
 
-  const query = { organization:  new mongoose.Types.ObjectId(req.user.organization) };
+  const query = {
+    organization: new mongoose.Types.ObjectId(req.user.organization),
+  };
   if (req.user.role !== "Super Admin") {
     query.creator = new mongoose.Types.ObjectId(req.user.id);
-  }
-  else {
+  } else {
     if (employee) {
       const isExistingEmployee = await adminModel.findOne({ email: employee });
       if (isExistingEmployee) {
@@ -352,7 +363,7 @@ const amountSummary = TryCatch(async (req, res) => {
           $lte: new Date(to),
           $gte: new Date(from),
         },
-        ...query
+        ...query,
       },
     },
     {
@@ -369,7 +380,7 @@ const amountSummary = TryCatch(async (req, res) => {
       },
     },
   ]);
-  
+
   const totalProformaInvoice = await proformaInvoiceModel.aggregate([
     {
       $match: {
@@ -377,7 +388,7 @@ const amountSummary = TryCatch(async (req, res) => {
           $lte: new Date(to),
           $gte: new Date(from),
         },
-        ...query
+        ...query,
       },
     },
     {
@@ -402,7 +413,7 @@ const amountSummary = TryCatch(async (req, res) => {
           $lte: new Date(to),
           $gte: new Date(from),
         },
-        ...query
+        ...query,
       },
     },
     {
@@ -428,7 +439,7 @@ const amountSummary = TryCatch(async (req, res) => {
           $gte: new Date(from),
         },
         paymentstatus: "Unpaid",
-        ...query
+        ...query,
       },
     },
     {
@@ -468,8 +479,12 @@ const productSummary = TryCatch(async (req, res) => {
   //   creator = req.user.id;
   // }
 
-  const categories = await productCategoryModel.find({organization: req.user.organization});
-  const products = await productModel.find({organization: req.user.organization}).populate("category");
+  const categories = await productCategoryModel.find({
+    organization: req.user.organization,
+  });
+  const products = await productModel
+    .find({ organization: req.user.organization })
+    .populate("category");
 
   res.status(200).json({
     status: 200,
@@ -482,7 +497,9 @@ const productSummary = TryCatch(async (req, res) => {
 const totalFollowUps = TryCatch(async (req, res) => {
   const { fromDate: from, toDate: to } = req.body;
 
-  const query = { organization:  new mongoose.Types.ObjectId(req.user.organization) };
+  const query = {
+    organization: new mongoose.Types.ObjectId(req.user.organization),
+  };
   if (req.user.role !== "Super Admin") {
     query.creator = new mongoose.Types.ObjectId(req.user.id);
   }
@@ -512,11 +529,12 @@ const leadsSummary = TryCatch(async (req, res) => {
     throw new Error("Missing required date fields", 400);
   }
 
-  const query = { organization:  new mongoose.Types.ObjectId(req.user.organization) };
+  const query = {
+    organization: new mongoose.Types.ObjectId(req.user.organization),
+  };
   if (req.user.role !== "Super Admin") {
     query.creator = new mongoose.Types.ObjectId(req.user.id);
-  }
-  else {
+  } else {
     if (employee) {
       const isExistingEmployee = await adminModel.findOne({ email: employee });
       if (isExistingEmployee) {
@@ -524,6 +542,13 @@ const leadsSummary = TryCatch(async (req, res) => {
       }
     }
   }
+
+  const totalLeads = await leadModel.find({
+    createdAt: {
+      $lte: new Date(to),
+      $gte: new Date(from),
+    },
+  }).countDocuments();
 
   const leads = await leadModel.aggregate([
     {
@@ -537,7 +562,7 @@ const leadsSummary = TryCatch(async (req, res) => {
           { status: "Completed" },
           { status: "Cancelled" },
         ],
-        ...query
+        ...query,
       },
     },
     {
@@ -598,6 +623,7 @@ const leadsSummary = TryCatch(async (req, res) => {
     status: 200,
     success: true,
     leads: results,
+    totalLeads
   });
 });
 
@@ -625,7 +651,9 @@ const leadsSummary = TryCatch(async (req, res) => {
 const getSupportSummary = TryCatch(async (req, res) => {
   const { fromDate: from, toDate: to } = req.body;
 
-  const query = { organization:  new mongoose.Types.ObjectId(req.user.organization) };
+  const query = {
+    organization: new mongoose.Types.ObjectId(req.user.organization),
+  };
   if (req.user.role !== "Super Admin") {
     query.creator = new mongoose.Types.ObjectId(req.user.id);
   }
@@ -680,6 +708,36 @@ const getSupportSummary = TryCatch(async (req, res) => {
   });
 });
 
+const getEmployeeSummary = TryCatch(async (req, res) => {
+  const totalEmployees = await adminModel.find({role: 'Admin', organization: req.user.organization}).countDocuments();
+
+  res.status(200).json({
+    status: 200,
+    success: true,
+    totalEmployees
+  })
+})
+
+const getPeopleSummary = TryCatch(async (req, res) => {
+  const totalPeople = await peopleModel.find({organization: req.user.organization}).countDocuments();
+
+  res.status(200).json({
+    status: 200,
+    success: true,
+    totalPeople
+  })
+})
+
+const getCompanySummary = TryCatch(async (req, res) => {
+  const totalCompanies = await companyModel.find({organization: req.user.organization}).countDocuments();
+
+  res.status(200).json({
+    status: 200,
+    success: true,
+    totalCompanies
+  })
+})
+
 module.exports = {
   invoiceSummary,
   offerSummary,
@@ -689,4 +747,7 @@ module.exports = {
   productSummary,
   leadsSummary,
   getSupportSummary,
+  getEmployeeSummary,
+  getPeopleSummary,
+  getCompanySummary
 };

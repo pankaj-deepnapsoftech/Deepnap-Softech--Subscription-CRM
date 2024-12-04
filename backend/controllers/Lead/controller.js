@@ -15,6 +15,8 @@ const sendSms = require("../../utils/sendSms");
 const { sendEmail, sendBusinessEmail } = require("../../helpers/sendEmail");
 const productModel = require("../../models/product");
 const { capitalizeFirstChar } = require("../../utils/capitalize");
+const { parse } = require("json2csv");
+const path = require("path");
 
 const createLead = TryCatch(async (req, res) => {
   const {
@@ -28,6 +30,8 @@ const createLead = TryCatch(async (req, res) => {
     assigned,
     followup_date,
     followup_reason,
+    location,
+    prc_qt
   } = req.body;
 
   const websiteCofiguration = await websiteConfigurationModel
@@ -66,6 +70,8 @@ const createLead = TryCatch(async (req, res) => {
       assigned,
       followup_date,
       followup_reason,
+      prc_qt,
+      location
     });
     lead = await leadModel.findById(lead._id).populate("products");
 
@@ -84,9 +90,7 @@ const createLead = TryCatch(async (req, res) => {
         });
       }
     } else if (
-      status === "Follow Up" &&
-      new Date(lead?.followup_date).toLocaleDateString() ===
-        new Date().toLocaleDateString()
+      status === "Follow Up"
     ) {
       const date = new Date();
       const followupDate = new Date(lead?.followup_date);
@@ -258,6 +262,8 @@ const createLead = TryCatch(async (req, res) => {
       notes,
       followup_date,
       followup_reason,
+      prc_qt,
+      location
     });
     lead = await leadModel.findById(lead._id).populate("products");
 
@@ -277,9 +283,7 @@ const createLead = TryCatch(async (req, res) => {
         });
       }
     } else if (
-      status === "Follow Up" &&
-      new Date(lead?.followup_date).toLocaleDateString() ===
-        new Date().toLocaleDateString()
+      status === "Follow Up"
     ) {
       const date = new Date();
       const followupDate = new Date(lead?.followup_date);
@@ -439,6 +443,8 @@ const editLead = TryCatch(async (req, res) => {
     assigned,
     followup_date,
     followup_reason,
+    prc_qt,
+    location
   } = req.body;
 
   const isExistingLead = await leadModel
@@ -475,7 +481,7 @@ const editLead = TryCatch(async (req, res) => {
         { _id: leadId },
         {
           $unset: { followup_date: "", followup_reason: "" },
-          $set: { creator: assigned, status: status, assigned, notes, source },
+          $set: { creator: assigned, status: status, assigned, notes, source, prc_qt, location },
         },
         { new: true }
       )
@@ -520,6 +526,8 @@ const editLead = TryCatch(async (req, res) => {
             followup_reason,
             notes,
             source,
+            prc_qt,
+            location
           },
         },
         { new: true }
@@ -559,7 +567,7 @@ const editLead = TryCatch(async (req, res) => {
       { _id: leadId },
       {
         $unset: { assigned: "", followup_date: "", followup_reason: "" },
-        $set: { status: status, source, notes },
+        $set: { status: status, source, notes, prc_qt, location },
       },
       { new: true }
     );
@@ -895,6 +903,8 @@ const allLeads = TryCatch(async (req, res) => {
       followup_reason: lead?.followup_reason,
       creator: lead?.creator.name,
       createdAt: lead?.createdAt,
+      location: lead?.location,
+      prc_qt: lead?.prc_qt
     };
   });
 
@@ -946,6 +956,8 @@ const assignedLeads = TryCatch(async (req, res) => {
       followup_reason: lead?.followup_reason,
       creator: lead?.creator?.name,
       createdAt: lead?.createdAt,
+      location: lead?.location,
+      prc_qt: lead?.prc_qt
     };
   });
 
@@ -1461,6 +1473,36 @@ const bulkUpload = async (req, res) => {
   // });
 };
 
+const bulkDownload = TryCatch(async (req, res)=>{
+  const leads = await leadModel.find().select("-_id -products -__v -assigned").populate("organization", "company").populate("creator", "name email phone").populate("people", "firstname lastname email phone").populate("company", "companyname email phone").lean();
+
+  let processedLeads = leads.map(lead => {
+    return {
+      ...lead,
+      organization: lead.organization.company || 'N/A',
+      creator: undefined,
+      creator_name: lead.creator.name || 'N/A',
+      creator_email: lead.creator.email || 'N/A',
+      people: lead?.people ? (lead?.people?.firstname + ' ' + (lead?.people?.lastname || '')) : 'N/A',
+      // people_firstname: lead?.people?.firstname || 'N/A',
+      // people_lastname: lead?.people?.lastname || 'N/A',
+      people_email: lead?.people?.email || 'N/A',
+      people_phone: lead?.people?.phone || 'N/A',
+      company: lead?.company?.companyname || 'N/A',
+      company_email: lead?.company?.email || 'N/A',
+      company_phone: lead?.company?.phone || 'N/A',
+      createdAt: new Date(lead?.createdAt).toLocaleDateString(),
+      updatedAt: new Date(lead?.updatedAt).toLocaleDateString(),
+      followup_date: lead.followup_date ? new Date(lead.followup_date).toLocaleDateString() : undefined
+    }
+  });
+
+  const csv = parse(processedLeads);
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', `attachment; filename="Leads-${Date.now()}.csv"`);
+  res.status(200).send(csv);
+})
+
 const checkDataValidity = async (data) => {
   for (item of data) {
     // If the name or companyname is present, or if both are present
@@ -1637,4 +1679,5 @@ module.exports = {
   leadSummary,
   bulkUpload,
   bulkAssign,
+  bulkDownload
 };

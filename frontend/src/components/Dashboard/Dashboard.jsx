@@ -64,6 +64,10 @@ const Dashboard = () => {
   const [totalProformaInvoiceAmount, setTotalProformaInvoiceAmount] =
     useState(0);
   const [totalOfferAmount, setTotalOfferAmount] = useState(0);
+  const [totalLeads, setTotalLeads] = useState(0);
+  const [totalEmployees, setTotalEmployees] = useState(0);
+  const [totalPeople, setTotalPeople] = useState(0);
+  const [totalCompanies, setTotalCompanies] = useState(0);
 
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -79,7 +83,6 @@ const Dashboard = () => {
   const [totalProformaInvoices, setTotalProformaInvoices] = useState(0);
   const [totalOffers, setTotalOffers] = useState(0);
   const [totalUnpaidInvoices, setTotalUnpaidInvoices] = useState(0);
-  const [totalLeads, setTotalLeads] = useState(0);
 
   const [newSupport, setNewSupport] = useState(0);
   const [underProcessSupport, setUnderProcessSupport] = useState(0);
@@ -333,6 +336,70 @@ const Dashboard = () => {
       setFollowupLeads(data.leads["Follow Up"]);
       setCompletedLeads(data.leads["Completed"]);
       setCancelledLeads(data.leads["Cancelled"]);
+      setTotalLeads(data.totalLeads);
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  const fetchEmployeeStats = async (from, to) => {
+    try {
+      const response = await fetch(
+        process.env.REACT_APP_BACKEND_URL + "dashboard/employee-summary",
+        {
+          method: "Get",
+          headers: {
+            Authorization: `Bearer ${cookies?.access_token}`
+          }
+        }
+      );
+      const data = await response.json();
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+      setTotalEmployees(data.totalEmployees);
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  const fetchPeopleStats = async (from, to) => {
+    try {
+      const response = await fetch(
+        process.env.REACT_APP_BACKEND_URL + "dashboard/people-summary",
+        {
+          method: "Get",
+          headers: {
+            Authorization: `Bearer ${cookies?.access_token}`
+          }
+        }
+      );
+      const data = await response.json();
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+      setTotalPeople(data.totalPeople);
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  const fetchCompanyStats = async (from, to) => {
+    try {
+      const response = await fetch(
+        process.env.REACT_APP_BACKEND_URL + "dashboard/company-summary",
+        {
+          method: "Get",
+          headers: {
+            Authorization: `Bearer ${cookies?.access_token}`
+          }
+        }
+      );
+      const data = await response.json();
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+      setTotalCompanies(data.totalCompanies);
     } catch (err) {
       toast.error(err.message);
     }
@@ -367,6 +434,9 @@ const Dashboard = () => {
     setAssignedSupport(0);
     setCompletedSupport(0);
     setProducts(0);
+    setTotalEmployees(0);
+    setTotalPeople(0);
+    setTotalCompanies(0);
 
     fetchInvoiceStats(from, to);
     fetchProformaInvoiceStats(from, to);
@@ -377,6 +447,9 @@ const Dashboard = () => {
     fetchProductStats();
     fetchLeadStats(from, to);
     fetchSupportSummary(from, to);
+    fetchEmployeeStats();
+    fetchPeopleStats();
+    fetchCompanyStats();
   };
 
   const filterBasedOnDate = async () => {
@@ -728,8 +801,100 @@ const Dashboard = () => {
                 </h1>
                 <div className="mt-4 font-bold text-[#595959]">
                   All Time
-                  <span className="bg-[#41ad5e] text-[#ffffff] rounded px-2 ml-1 py-1">
+                  <span className="bg-[#0095ff] text-[#ffffff] rounded px-2 ml-1 py-1">
                     {products.length}
+                  </span>
+                </div>
+              </div>
+            </Link>
+            <Link to="admins">
+              <div
+                style={{ boxShadow: "0 0 20px 3px #96beee26" }}
+                className="bg-white rounded-md text-center py-7"
+              >
+                <h1 className="flex items-center justify-center gap-2 text-xl border-b font-bold pb-4 text-[#22075e]">
+                  Total Employees
+                  <MdKeyboardArrowRight size={25} />
+                  {/* {!productDropdown && (
+                  <FaChevronDown onClick={() => setProductDropdown(true)} />
+                )}
+                {productDropdown && (
+                  <FaChevronUp onClick={() => setProductDropdown(false)} />
+                )} */}
+                </h1>
+                <div className="mt-4 font-bold text-[#595959]">
+                  All Time
+                  <span className="bg-[#41ad5e] text-[#ffffff] rounded px-2 ml-1 py-1">
+                    {totalEmployees}
+                  </span>
+                </div>
+              </div>
+            </Link>
+            <Link to="individuals">
+              <div
+                style={{ boxShadow: "0 0 20px 3px #96beee26" }}
+                className="bg-white rounded-md text-center py-7"
+              >
+                <h1 className="flex items-center justify-center gap-2 text-xl border-b font-bold pb-4 text-[#22075e]">
+                  Total Individuals
+                  <MdKeyboardArrowRight size={25} />
+                  {/* {!productDropdown && (
+                  <FaChevronDown onClick={() => setProductDropdown(true)} />
+                )}
+                {productDropdown && (
+                  <FaChevronUp onClick={() => setProductDropdown(false)} />
+                )} */}
+                </h1>
+                <div className="mt-4 font-bold text-[#595959]">
+                  All Time
+                  <span className="bg-[#ff8b46] text-[#ffffff] rounded px-2 ml-1 py-1">
+                    {totalPeople}
+                  </span>
+                </div>
+              </div>
+            </Link>
+            <Link to="corporates">
+              <div
+                style={{ boxShadow: "0 0 20px 3px #96beee26" }}
+                className="bg-white rounded-md text-center py-7"
+              >
+                <h1 className="flex items-center justify-center gap-2 text-xl border-b font-bold pb-4 text-[#22075e]">
+                  Total Corporates
+                  <MdKeyboardArrowRight size={25} />
+                  {/* {!productDropdown && (
+                  <FaChevronDown onClick={() => setProductDropdown(true)} />
+                )}
+                {productDropdown && (
+                  <FaChevronUp onClick={() => setProductDropdown(false)} />
+                )} */}
+                </h1>
+                <div className="mt-4 font-bold text-[#595959]">
+                  All Time
+                  <span className="bg-[#ff6565] text-[#ffffff] rounded px-2 ml-1 py-1">
+                    {totalCompanies}
+                  </span>
+                </div>
+              </div>
+            </Link>
+            <Link to="leads">
+              <div
+                style={{ boxShadow: "0 0 20px 3px #96beee26" }}
+                className="bg-white rounded-md text-center py-7"
+              >
+                <h1 className="flex items-center justify-center gap-2 text-xl border-b font-bold pb-4 text-[#22075e]">
+                  Total Leads
+                  <MdKeyboardArrowRight size={25} />
+                  {/* {!productDropdown && (
+                  <FaChevronDown onClick={() => setProductDropdown(true)} />
+                )}
+                {productDropdown && (
+                  <FaChevronUp onClick={() => setProductDropdown(false)} />
+                )} */}
+                </h1>
+                <div className="mt-4 font-bold text-[#595959]">
+                  All Time
+                  <span className="bg-[#0095ff] text-[#ffffff] rounded px-2 ml-1 py-1">
+                    {totalLeads}
                   </span>
                 </div>
               </div>
@@ -753,7 +918,7 @@ const Dashboard = () => {
               </h1>
               <div className="mt-4 font-bold text-[#595959]">
                 {/* This Month */}
-                <span className="bg-[#ff8b46] text-[#ffffff] rounded px-2 ml-1 py-1">
+                <span className="bg-[#41ad5e] text-[#ffffff] rounded px-2 ml-1 py-1">
                   {followupLeads}
                 </span>
               </div>
@@ -771,7 +936,7 @@ const Dashboard = () => {
               </h1>
               <div className="mt-4 font-bold text-[#595959]">
                 {/* This Month */}
-                <span className="bg-[#ff6565] text-[#ffffff] rounded px-2 ml-1 py-1">
+                <span className="bg-[#ff8b46] text-[#ffffff] rounded px-2 ml-1 py-1">
                   {completedLeads}
                 </span>
               </div>

@@ -256,7 +256,7 @@ const Invoices = () => {
         a.remove();
       })
       .catch((err) => {
-        toast.error("Something went wrong");
+        toast.error(err?.message || "Something went wrong");
       });
   };
 
