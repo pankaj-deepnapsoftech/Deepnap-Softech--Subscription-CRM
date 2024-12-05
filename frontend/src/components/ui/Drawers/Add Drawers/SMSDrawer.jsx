@@ -11,6 +11,12 @@ const SMSDrawer = ({ fetchAllLeads, closeDrawerHandler, mobiles }) => {
 
     const sendBulkSMSHandler = async (e)=>{
         e.preventDefault();
+
+        if(mobiles.length === 0){
+          toast.error('No lead selected');
+          closeDrawerHandler();
+          return;
+        }
         
         try {
             const response = await fetch(process.env.REACT_APP_BACKEND_URL+'sms/send-bulk-sms', {

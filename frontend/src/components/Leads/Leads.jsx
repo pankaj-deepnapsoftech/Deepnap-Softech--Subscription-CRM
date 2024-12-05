@@ -286,9 +286,6 @@ const Leads = () => {
         throw new Error(data.message);
       }
 
-      // const bulkSMSMobilesArr = data.leads.map((data) => data?.phone);
-      // setBulkSMSMobiles(bulkSMSMobilesArr);
-
       setData(data.leads);
       setFilteredData(data.leads);
       setLoading(false);
@@ -383,14 +380,34 @@ const Leads = () => {
     }
   };
 
-  const selectAllHandler = ()=>{
-    const rows = document.getElementsByName("select");
+  const selectAllHandler = () => {
     const select = !isAllSelected;
-    Array.from(rows).forEach((e) => {
+    setIsAllSelected(select);
+    const rows = Array.from(document.getElementsByName("select")).slice(
+      pageIndex * pageSize,
+      pageIndex * pageSize + pageSize
+    );
+    rows.forEach((e) => {
       e.checked = select;
     });
-    setIsAllSelected(prev => !prev);
-  }
+
+    if (select) {
+      const reqData = filteredData.slice(
+        pageIndex * pageSize,
+        pageIndex * pageSize + pageSize
+      );
+      const bulkSMSMobilesArr = reqData.map((data) => data.phone);
+      setBulkSMSMobiles(bulkSMSMobilesArr);
+    } else {
+      setBulkSMSMobiles([]);
+    }
+  };
+
+  const selectOneHandler = (e, phone) => {
+    if (e.target.checked) {
+      setBulkSMSMobiles((prev) => [...prev, phone]);
+    }
+  };
 
   const bulkAssignHandler = async (e) => {
     const rows = document.getElementsByName("select");
@@ -516,6 +533,8 @@ const Leads = () => {
   }, []);
 
   useEffect(() => {
+    setBulkSMSMobiles([]);
+    setIsAllSelected(false);
     if (searchKey.trim() !== "") {
       const searchedData = data.filter(
         (d) =>
@@ -547,15 +566,16 @@ const Leads = () => {
               ?.includes(searchKey.replaceAll("/", ""))) ||
           d?.email?.toLowerCase().includes(searchKey.toLowerCase())
       );
-      // const bulkSMSMobilesArr = searchedData.map((data) => data?.phone);
-      // setBulkSMSMobiles(bulkSMSMobilesArr);
       setFilteredData(searchedData);
     } else {
-      // const bulkSMSMobilesArr = data.map((data) => data?.phone);
-      // setBulkSMSMobiles(bulkSMSMobilesArr);
       setFilteredData(data);
     }
   }, [searchKey, data]);
+
+  useEffect(() => {
+    setIsAllSelected(false);
+    setBulkSMSMobiles([]);
+  }, [pageIndex]);
 
   return (
     <>
@@ -670,7 +690,7 @@ const Leads = () => {
                   backgroundColor="#1640d6"
                   borderColor="#1640d6"
                 >
-                  {isAllSelected ? 'Unselect All' : 'Select All'}
+                  {isAllSelected ? "Unselect All" : "Select All"}
                 </Button>
                 <Button
                   fontSize={{ base: "14px", md: "14px" }}
@@ -844,11 +864,17 @@ const Leads = () => {
                 <ClickMenu
                   top={0}
                   right={0}
-                  closeContextMenuHandler={() => dispatch(closeSendSMSDrawer())}
+                  closeContextMenuHandler={() => {
+                    dispatch(closeSendSMSDrawer());
+                    setBulkSMSMobiles([]);
+                  }}
                 >
                   <SMSDrawer
                     fetchAllLeads={fetchAllLeads}
-                    closeDrawerHandler={() => dispatch(closeSendSMSDrawer())}
+                    closeDrawerHandler={() => {
+                      dispatch(closeSendSMSDrawer());
+                      setBulkSMSMobiles([]);
+                    }}
                     mobiles={bulkSMSMobiles}
                   />
                 </ClickMenu>
@@ -1017,6 +1043,13 @@ const Leads = () => {
                                         value={cell.row.original._id}
                                         name="select"
                                         type="checkbox"
+                                        onChange={(e) => {
+                                          selectOneHandler(
+                                            e,
+                                            cell.row.original.phone
+                                          )
+                                        }
+                                        }
                                       />
                                     )}
 
