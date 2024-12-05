@@ -131,7 +131,7 @@ const ProductsDrawer = ({fetchAllProducts, closeDrawerHandler}) => {
         <form onSubmit={addProductHandler}>
           <FormControl className="mt-3 mb-5">
             <FormLabel fontWeight="bold">Product Image</FormLabel>
-            <Input padding={"6px 14px"} type="file" accept=".jpg,.jpeg,.png,.webp" ref={file} />
+            <input className="py-1 px-3" type="file" accept=".jpg,.jpeg,.png,.webp" ref={file} />
           </FormControl>
           <FormControl className="mt-3 mb-5" isRequired>
             <FormLabel fontWeight="bold">Name</FormLabel>

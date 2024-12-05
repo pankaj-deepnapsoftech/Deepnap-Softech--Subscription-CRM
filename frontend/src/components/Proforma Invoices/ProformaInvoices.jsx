@@ -249,7 +249,11 @@ const ProformaInvoices = () => {
         proformaInvoiceId: id,
       }),
     })
-      .then((response) => {
+      .then(async (response) => {
+        const data = await response.json();
+        if(!data.success){
+          throw new Error(data.message);
+        }
         const filename = response.headers
           .get("content-disposition")
           .split("filename=")[1]

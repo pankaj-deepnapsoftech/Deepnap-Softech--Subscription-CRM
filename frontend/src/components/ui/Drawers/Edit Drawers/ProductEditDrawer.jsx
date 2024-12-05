@@ -227,8 +227,8 @@ const ProductsEditDrawer = ({
           <form onSubmit={editProductHandler}>
             <FormControl className="mt-3 mb-5">
               <FormLabel fontWeight="bold">Product Image</FormLabel>
-              <Input
-                padding={"6px 14px"}
+              <input
+                className="py-1 px-3"
                 type="file"
                 accept=".jpg,.jpeg,.png,.webp"
                 ref={file}
