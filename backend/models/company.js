@@ -34,6 +34,9 @@ const companySchema = mongoose.Schema(
     website: {
       type: String,
     },
+    gst_no: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

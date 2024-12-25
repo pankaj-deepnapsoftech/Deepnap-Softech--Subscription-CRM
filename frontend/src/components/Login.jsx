@@ -284,7 +284,9 @@ const Login = () => {
     <div className="w-full min-h-[100vh] flex">
       <div className="hidden xl:flex bg-[#e3e3e3] h-[100vh] w-[50%] flex-col justify-center items-center">
         <div className="mb-5">
-          <Link to="/"><img className="w-[200px]" src={logo}></img></Link>
+          <Link to="/">
+            <img className="w-[200px]" src={logo}></img>
+          </Link>
         </div>
         <div>
           <h1 className="mb-5 text-2xl font-bold text-[#4f5d75]">
@@ -595,10 +597,23 @@ const Login = () => {
                     value={password}
                     required
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-[100%] outline-none text-base pl-7 pr-2 py-2 border rounded mt-2 border-[#d9d9d9] rounded-[10px] hover:border-[#1640d6] cursor-pointer"
-                    type="password"
-                    placeholder="password"
+                    className="w-[100%] outline-none text-base pl-7 pr-2 py-2 border mt-2 border-[#d9d9d9] rounded-[10px] hover:border-[#1640d6] cursor-pointer"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
                   />
+                  {!showPassword ? (
+                    <IoEyeOffOutline
+                      onClick={() => setShowPassword(true)}
+                      size={20}
+                      className="absolute top-[20px] right-3"
+                    />
+                  ) : (
+                    <IoEyeOutline
+                      onClick={() => setShowPassword(false)}
+                      size={20}
+                      className="absolute top-[20px] right-3"
+                    />
+                  )}
                 </div>
               </div>
               {/* <div className="text-[#1640d6] mt-2">

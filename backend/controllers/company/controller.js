@@ -3,7 +3,7 @@ const { TryCatch, ErrorHandler } = require("../../helpers/error");
 const companyModel = require("../../models/company");
 
 const createCompany = TryCatch(async (req, res) => {
-  const { companyname, email, website, contact, phone } = req.body;
+  const { companyname, email, website, contact, phone, gst_no } = req.body;
 
   let isExistingCompany = await companyModel.findOne({ email });
   if (isExistingCompany) {
@@ -28,6 +28,7 @@ const createCompany = TryCatch(async (req, res) => {
     contact: contact,
     phone: phone,
     website: website,
+    gst_no: gst_no
   });
 
   res.status(200).json({
@@ -39,7 +40,7 @@ const createCompany = TryCatch(async (req, res) => {
 });
 
 const editCompany = TryCatch(async (req, res) => {
-  const { companyId, name, email, website, contact, phone } = req.body;
+  const { companyId, name, email, website, contact, phone, gst_no } = req.body;
 
   const company = await companyModel.findById(companyId);
 
@@ -71,7 +72,7 @@ const editCompany = TryCatch(async (req, res) => {
 
   const updatedCompany = await companyModel.findOneAndUpdate(
     { _id: companyId },
-    { name, email, phone, contact, website },
+    { name, email, phone, contact, website, gst_no },
     { new: true }
   );
 

@@ -12,6 +12,7 @@ import ForgetPassword from "./ForgetPassword";
 import Register from "./Register";
 import Login from "./Login";
 import OTPVeification from "./OTPVeification";
+import { RxCross2 } from "react-icons/rx";
 
 const Authentication = ({ hideModal }) => {
   const [isRegistering, setIsRegistering] = useState(true);
@@ -34,6 +35,9 @@ const Authentication = ({ hideModal }) => {
     <div>
       <Modal hideModal={hideModal}>
         <div className="flex lg:min-h-[35rem] lg:h-auto">
+          <div onClick={hideModal} className="absolute top-4 right-6 z-10 border-[2px] border-[#2a2851] rounded-full hover:scale-105">
+            <RxCross2 color="#2a2851" size={24} />
+          </div>
           {isRegistering && (
             <div
               className="hidden lg:flex w-[30rem] h-[inherit] justify-center items-center"

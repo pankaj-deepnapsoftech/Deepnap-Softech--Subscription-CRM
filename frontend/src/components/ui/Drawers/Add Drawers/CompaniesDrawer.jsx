@@ -19,6 +19,7 @@ const CompaniesDrawer = ({ fetchAllCompanies, closeDrawerHandler }) => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [website, setWebsite] = useState("");
+  const [gstNo, setGstNo] = useState("");
   const [cookies] = useCookies();
 
   const dispatch = useDispatch();
@@ -46,6 +47,7 @@ const CompaniesDrawer = ({ fetchAllCompanies, closeDrawerHandler }) => {
           contact: contact,
           phone: phone,
           website: website,
+          gst_no: gstNo
         }),
       });
 
@@ -154,6 +156,14 @@ const CompaniesDrawer = ({ fetchAllCompanies, closeDrawerHandler }) => {
               value={website}
               onChange={(e) => setWebsite(e.target.value)}
               placeholder="Website"
+            />
+          </FormControl>
+          <FormControl className="mt-3 mb-5">
+            <FormLabel fontWeight="bold">GST No.</FormLabel>
+            <Input
+              value={gstNo}
+              onChange={(e) => setGstNo(e.target.value)}
+              placeholder="GST No."
             />
           </FormControl>
           <Button

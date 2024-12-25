@@ -11,13 +11,18 @@ import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import Loading from "../../Loading";
 
-const CompaniesEditDrawer = ({ dataId: id, closeDrawerHandler, fetchAllCompanies }) => {
+const CompaniesEditDrawer = ({
+  dataId: id,
+  closeDrawerHandler,
+  fetchAllCompanies,
+}) => {
   const [peoples, setPeoples] = useState([]);
   const [name, setName] = useState("");
   const [contact, setContact] = useState();
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [website, setWebsite] = useState("");
+  const [gstNo, setGstNo] = useState("");
   const [cookies] = useCookies();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,6 +45,7 @@ const CompaniesEditDrawer = ({ dataId: id, closeDrawerHandler, fetchAllCompanies
           contact: contact,
           phone: phone,
           website: website,
+          gst_no: gstNo,
         }),
       });
 
@@ -78,41 +84,40 @@ const CompaniesEditDrawer = ({ dataId: id, closeDrawerHandler, fetchAllCompanies
       toast(err.message);
     }
   };
-  
 
-  const fetchCompanyDetails = async ()=>{
+  const fetchCompanyDetails = async () => {
     setIsLoading(true);
-    try{
-        const baseUrl = process.env.REACT_APP_BACKEND_URL;
-        const response = await fetch(baseUrl+'company/company-details', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${cookies?.access_token}`
-            },
-            body: JSON.stringify({
-                companyId: id
-            })
-        })
+    try {
+      const baseUrl = process.env.REACT_APP_BACKEND_URL;
+      const response = await fetch(baseUrl + "company/company-details", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cookies?.access_token}`,
+        },
+        body: JSON.stringify({
+          companyId: id,
+        }),
+      });
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if(!data.success){
-            throw new Error(data.message);
-        }
- 
-        setName(data.company?.companyname);
-        setEmail(data.company?.email);
-        setContact(data.company?.contact);
-        setPhone(data.company?.phone);
-        setWebsite(data.company?.website);
+      if (!data.success) {
+        throw new Error(data.message);
+      }
 
-        setIsLoading(false);
+      setName(data.company?.companyname);
+      setEmail(data.company?.email);
+      setContact(data.company?.contact);
+      setPhone(data.company?.phone);
+      setWebsite(data.company?.website);
+      setGstNo(data.company?.gst_no);
+
+      setIsLoading(false);
+    } catch (err) {
+      toast.error(err.message);
     }
-    catch(err){
-        toast.error(err.message);
-    }
-  }
+  };
 
   useEffect(() => {
     fetchCompanyDetails();
@@ -138,25 +143,26 @@ const CompaniesEditDrawer = ({ dataId: id, closeDrawerHandler, fetchAllCompanies
         </h2>
 
         {isLoading && <Loading />}
-        {!isLoading && <form onSubmit={editCompanyHandler}>
-          <FormControl className="mt-3 mb-5" isRequired>
-            <FormLabel fontWeight="bold">Name</FormLabel>
-            <Input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              type="text"
-              placeholder="Name"
-            />
-          </FormControl>
-          <FormControl className="mt-2 mb-5">
-            <FormLabel fontWeight="bold">Contact</FormLabel>
-            <Input
-              value={contact}
-              onChange={(e) => setContact(e.target.value)}
-              type="text"
-              placeholder="Name"
-            />
-            {/* <Select
+        {!isLoading && (
+          <form onSubmit={editCompanyHandler}>
+            <FormControl className="mt-3 mb-5" isRequired>
+              <FormLabel fontWeight="bold">Name</FormLabel>
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                type="text"
+                placeholder="Name"
+              />
+            </FormControl>
+            <FormControl className="mt-2 mb-5">
+              <FormLabel fontWeight="bold">Contact</FormLabel>
+              <Input
+                value={contact}
+                onChange={(e) => setContact(e.target.value)}
+                type="text"
+                placeholder="Name"
+              />
+              {/* <Select
               value={contactId}
               onChange={(e) => setContactId(e.target.value)}
               placeholder="Select contact"
@@ -167,44 +173,53 @@ const CompaniesEditDrawer = ({ dataId: id, closeDrawerHandler, fetchAllCompanies
                 </option>
               ))}
             </Select> */}
-          </FormControl>
-          <FormControl className="mt-3 mb-5" isRequired>
-            <FormLabel fontWeight="bold">Phone</FormLabel>
-            <Input
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              type="number"
-              className="no-scroll"
-              placeholder="Phone"
-            />
-          </FormControl>
-          <FormControl className="mt-3 mb-5">
-            <FormLabel fontWeight="bold">Email</FormLabel>
-            <Input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              type="email"
-              placeholder="Email"
-            />
-          </FormControl>
-          <FormControl className="mt-3 mb-5">
-            <FormLabel fontWeight="bold">Website</FormLabel>
-            <Input
-              value={website}
-              onChange={(e) => setWebsite(e.target.value)}
-              type="text"
-              placeholder="Website"
-            />
-          </FormControl>
-          <Button
-            type="submit"
-            className="mt-1"
-            color="white"
-            backgroundColor="#1640d6"
-          >
-            Submit
-          </Button>
-        </form>}
+            </FormControl>
+            <FormControl className="mt-3 mb-5" isRequired>
+              <FormLabel fontWeight="bold">Phone</FormLabel>
+              <Input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                type="number"
+                className="no-scroll"
+                placeholder="Phone"
+              />
+            </FormControl>
+            <FormControl className="mt-3 mb-5">
+              <FormLabel fontWeight="bold">Email</FormLabel>
+              <Input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                placeholder="Email"
+              />
+            </FormControl>
+            <FormControl className="mt-3 mb-5">
+              <FormLabel fontWeight="bold">Website</FormLabel>
+              <Input
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                type="text"
+                placeholder="Website"
+              />
+            </FormControl>
+            <FormControl className="mt-3 mb-5">
+              <FormLabel fontWeight="bold">GST No.</FormLabel>
+              <Input
+                value={gstNo}
+                onChange={(e) => setGstNo(e.target.value)}
+                placeholder="GST No."
+              />
+            </FormControl>
+            <Button
+              type="submit"
+              className="mt-1"
+              color="white"
+              backgroundColor="#1640d6"
+            >
+              Submit
+            </Button>
+          </form>
+        )}
       </div>
     </div>
   );

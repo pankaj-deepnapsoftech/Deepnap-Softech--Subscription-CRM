@@ -79,6 +79,10 @@ const columns = [
     Header: "Website",
     accessor: "website",
   },
+  {
+    Header: "GST No.",
+    accessor: "gst_no",
+  },
 ];
 
 const Companies = () => {

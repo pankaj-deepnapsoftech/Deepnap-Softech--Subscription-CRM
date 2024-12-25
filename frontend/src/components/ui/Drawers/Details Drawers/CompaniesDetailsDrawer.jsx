@@ -34,6 +34,7 @@ const CompaniesDetailsDrawer = ({dataId: id, closeDrawerHandler}) => {
         phone: data.company?.phone,
         contact: data.company?.contact,
         website: data.company?.website,
+        gst_no: data.company?.gst_no
       });
 
       setIsLoading(false);
@@ -87,6 +88,10 @@ const CompaniesDetailsDrawer = ({dataId: id, closeDrawerHandler}) => {
             <div className="mt-3 mb-5 font-bold">
               <p>Website</p>
               <p className="font-normal">{details?.website ? details.website : 'Not Available'}</p>
+            </div>
+            <div className="mt-3 mb-5 font-bold">
+              <p>GST No.</p>
+              <p className="font-normal">{details?.gst_no ? details.gst_no : 'Not Available'}</p>
             </div>
           </div>
         )}

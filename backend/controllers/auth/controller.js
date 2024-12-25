@@ -405,6 +405,10 @@ const isAuthenticated = TryCatch(async (req, res, next) => {
   }
 });
 
+const isExists = TryCatch(async (req, res, next)=>{
+  
+})
+
 const generateOTP = () => {
   let digits = "0123456789";
   let OTP = "";
