@@ -8,8 +8,12 @@ const NotificationContextProvider = ({ children }) => {
   const [cookies] = useCookies();
 
   const getNotifications = async () => {
+    if(cookies?.access_token === undefined){
+      return;
+    }
+
     try {
-      //   setLoadingNotifications(true);
+      // setLoadingNotifications(true);
       dispatchNotificationAction({ type: "GET_NOTIFICATION" });
       const baseUrl = process.env.REACT_APP_BACKEND_URL;
       const response = await fetch(baseUrl + "notification/all", {

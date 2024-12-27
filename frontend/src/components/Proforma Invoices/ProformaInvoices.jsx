@@ -1,4 +1,4 @@
-import { Button, useDisclosure } from "@chakra-ui/react";
+import { Button, Select, useDisclosure } from "@chakra-ui/react";
 import {
   MdOutlineRefresh,
   MdArrowBack,
@@ -100,8 +100,9 @@ const ProformaInvoices = () => {
     previousPage,
     canNextPage,
     canPreviousPage,
-    state: { pageIndex },
+    state: { pageIndex, pageSize },
     pageCount,
+    setPageSize
   } = useTable({ columns, data: filteredData }, useSortBy, usePagination);
 
   const {
@@ -391,6 +392,16 @@ const ProformaInvoices = () => {
                 >
                   Add New Proforma Invoice
                 </Button>
+                <Select
+                  onChange={(e) => setPageSize(e.target.value)}
+                  width="80px"
+                >
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                  <option value={100}>100</option>
+                  <option value={100000}>All</option>
+                </Select>
               </div>
             </div>
           </div>
@@ -461,7 +472,7 @@ const ProformaInvoices = () => {
             )}
             {!loading && filteredData.length > 0 && (
               <div>
-                <TableContainer>
+                <TableContainer maxHeight="600px" overflowY="auto">
                   <Table variant="simple" {...getTableProps()}>
                     <Thead className="text-lg font-semibold">
                       {headerGroups.map((hg) => {

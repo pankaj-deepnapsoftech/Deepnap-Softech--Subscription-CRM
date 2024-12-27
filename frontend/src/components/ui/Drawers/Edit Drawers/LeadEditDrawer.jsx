@@ -48,7 +48,7 @@ const LeadEditDrawer = ({
   const notificationCtx = useContext(notificationContext);
 
   const statusOptionsList = [
-    { value: "Draft", label: "Draft" },
+    // { value: "Draft", label: "Draft" },
     { value: "New", label: "New" },
     { value: "In Negotiation", label: "In Negotiation" },
     { value: "Completed", label: "Completed" },

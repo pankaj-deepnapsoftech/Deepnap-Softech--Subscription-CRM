@@ -349,8 +349,8 @@ const Dashboard = () => {
         {
           method: "Get",
           headers: {
-            Authorization: `Bearer ${cookies?.access_token}`
-          }
+            Authorization: `Bearer ${cookies?.access_token}`,
+          },
         }
       );
       const data = await response.json();
@@ -370,8 +370,8 @@ const Dashboard = () => {
         {
           method: "Get",
           headers: {
-            Authorization: `Bearer ${cookies?.access_token}`
-          }
+            Authorization: `Bearer ${cookies?.access_token}`,
+          },
         }
       );
       const data = await response.json();
@@ -391,8 +391,8 @@ const Dashboard = () => {
         {
           method: "Get",
           headers: {
-            Authorization: `Bearer ${cookies?.access_token}`
-          }
+            Authorization: `Bearer ${cookies?.access_token}`,
+          },
         }
       );
       const data = await response.json();
@@ -659,34 +659,6 @@ const Dashboard = () => {
               style={{ boxShadow: "0 0 20px 3px #96beee26" }}
               className="bg-white rounded-md text-center py-7"
             >
-              <h1 className="text-xl border-b pb-4 font-bold text-[#22075e]">
-                Invoices
-              </h1>
-              <div className="mt-4 font-bold font-bold text-[#595959]">
-                {/* This Month */}
-                <span className="bg-[#0095ff] text-[#ffffff] rounded px-2 ml-1 py-1">
-                  Rs {totalInvoiceAmount.toFixed(2)}
-                </span>
-              </div>
-            </div>
-            <div
-              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
-              className="bg-white rounded-md text-center py-7"
-            >
-              <h1 className="text-xl border-b font-bold pb-4 text-[#22075e]">
-                Proforma Invoices
-              </h1>
-              <div className="mt-4 font-bold text-[#595959]">
-                {/* This Month */}
-                <span className="bg-[#41ad5e] text-[#ffffff] rounded px-2 ml-1 py-1">
-                  Rs {totalProformaInvoiceAmount.toFixed(2)}
-                </span>
-              </div>
-            </div>
-            <div
-              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
-              className="bg-white rounded-md text-center py-7"
-            >
               <h1 className="text-xl border-b font-bold pb-4 text-[#22075e]">
                 Offers
               </h1>
@@ -694,6 +666,20 @@ const Dashboard = () => {
                 {/* This Month */}
                 <span className="bg-[#ff8b46] text-[#ffffff] rounded px-2 ml-1 py-1">
                   Rs {totalOfferAmount.toFixed(2)}
+                </span>
+              </div>
+            </div>
+            <div
+              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
+              className="bg-white rounded-md text-center py-7"
+            >
+              <h1 className="text-xl border-b pb-4 font-bold text-[#22075e]">
+                Invoices
+              </h1>
+              <div className="mt-4 font-bold font-bold text-[#595959]">
+                {/* This Month */}
+                <span className="bg-[#0095ff] text-[#ffffff] rounded px-2 ml-1 py-1">
+                  Rs {totalInvoiceAmount.toFixed(2)}
                 </span>
               </div>
             </div>
@@ -711,102 +697,22 @@ const Dashboard = () => {
                 </span>
               </div>
             </div>
-          </div>
 
-          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-2 gap-x-2">
-            <div
-              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
-              className="bg-white rounded-md text-center py-7"
-            >
-              <h1 className="text-xl border-b pb-4 font-bold text-[#22075e]">
-                Total Invoices
-              </h1>
-              <div className="mt-4 font-bold font-bold text-[#595959]">
-                <span className="bg-[#0095ff] text-[#ffffff] rounded px-2 ml-1 py-1">
-                  {totalInvoices}
-                </span>
-              </div>
-            </div>
             <div
               style={{ boxShadow: "0 0 20px 3px #96beee26" }}
               className="bg-white rounded-md text-center py-7"
             >
               <h1 className="text-xl border-b font-bold pb-4 text-[#22075e]">
-                Total Proforma Invoices
+                Proforma Invoices
               </h1>
               <div className="mt-4 font-bold text-[#595959]">
+                {/* This Month */}
                 <span className="bg-[#41ad5e] text-[#ffffff] rounded px-2 ml-1 py-1">
-                  {totalProformaInvoices}
+                  Rs {totalProformaInvoiceAmount.toFixed(2)}
                 </span>
               </div>
             </div>
-            <div
-              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
-              className="bg-white rounded-md text-center py-7"
-            >
-              <h1 className="text-xl border-b font-bold pb-4 text-[#22075e]">
-                Total Offers
-              </h1>
-              <div className="mt-4 font-bold text-[#595959]">
-                <span className="bg-[#ff8b46] text-[#ffffff] rounded px-2 ml-1 py-1">
-                  {totalOffers}
-                </span>
-              </div>
-            </div>
-            <div
-              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
-              className="bg-white rounded-md text-center py-7"
-            >
-              <h1 className="text-xl border-b pb-4 font-bold text-[#22075e]">
-                Total Unpaid Invoices
-              </h1>
-              <div className="mt-4 font-bold text-[#595959]">
-                <span className="bg-[#ff6565] text-[#ffffff] rounded px-2 ml-1 py-1">
-                  {totalUnpaidInvoices}
-                </span>
-              </div>
-            </div>
-          </div>
 
-          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-2 gap-x-2">
-            {/* <Link to="products-category"><div
-              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
-              className="bg-white rounded-md text-center py-7"
-            >
-              <h1 className="flex items-center justify-center gap-2 text-xl border-b pb-4 font-bold text-[#22075e]">
-                Total Categories
-                <MdKeyboardArrowRight size={25} />
-              </h1>
-              <div className="mt-4 font-bold text-[#595959]">
-                All Time
-                <span className="bg-[#0095ff] text-[#ffffff] rounded px-2 ml-1 py-1">
-                  {categories.length}
-                </span>
-              </div>
-            </div></Link> */}
-            <Link to="products">
-              <div
-                style={{ boxShadow: "0 0 20px 3px #96beee26" }}
-                className="bg-white rounded-md text-center py-7"
-              >
-                <h1 className="flex items-center justify-center gap-2 text-xl border-b font-bold pb-4 text-[#22075e]">
-                  Total Products
-                  <MdKeyboardArrowRight size={25} />
-                  {/* {!productDropdown && (
-                  <FaChevronDown onClick={() => setProductDropdown(true)} />
-                )}
-                {productDropdown && (
-                  <FaChevronUp onClick={() => setProductDropdown(false)} />
-                )} */}
-                </h1>
-                <div className="mt-4 font-bold text-[#595959]">
-                  All Time
-                  <span className="bg-[#0095ff] text-[#ffffff] rounded px-2 ml-1 py-1">
-                    {products.length}
-                  </span>
-                </div>
-              </div>
-            </Link>
             <Link to="admins">
               <div
                 style={{ boxShadow: "0 0 20px 3px #96beee26" }}
@@ -830,6 +736,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </Link>
+
             <Link to="individuals">
               <div
                 style={{ boxShadow: "0 0 20px 3px #96beee26" }}
@@ -876,6 +783,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </Link>
+
             <Link to="leads">
               <div
                 style={{ boxShadow: "0 0 20px 3px #96beee26" }}
@@ -959,6 +867,102 @@ const Dashboard = () => {
                 </span>
               </div>
             </div>
+
+            <div
+              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
+              className="bg-white rounded-md text-center py-7"
+            >
+              <h1 className="text-xl border-b font-bold pb-4 text-[#22075e]">
+                Total Offers
+              </h1>
+              <div className="mt-4 font-bold text-[#595959]">
+                <span className="bg-[#ff8b46] text-[#ffffff] rounded px-2 ml-1 py-1">
+                  {totalOffers}
+                </span>
+              </div>
+            </div>
+            <div
+              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
+              className="bg-white rounded-md text-center py-7"
+            >
+              <h1 className="text-xl border-b pb-4 font-bold text-[#22075e]">
+                Total Invoices
+              </h1>
+              <div className="mt-4 font-bold font-bold text-[#595959]">
+                <span className="bg-[#0095ff] text-[#ffffff] rounded px-2 ml-1 py-1">
+                  {totalInvoices}
+                </span>
+              </div>
+            </div>
+
+            <div
+              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
+              className="bg-white rounded-md text-center py-7"
+            >
+              <h1 className="text-xl border-b pb-4 font-bold text-[#22075e]">
+                Total Unpaid Invoices
+              </h1>
+              <div className="mt-4 font-bold text-[#595959]">
+                <span className="bg-[#ff6565] text-[#ffffff] rounded px-2 ml-1 py-1">
+                  {totalUnpaidInvoices}
+                </span>
+              </div>
+            </div>
+
+            <div
+              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
+              className="bg-white rounded-md text-center py-7"
+            >
+              <h1 className="text-xl border-b font-bold pb-4 text-[#22075e]">
+                Total Proforma Invoices
+              </h1>
+              <div className="mt-4 font-bold text-[#595959]">
+                <span className="bg-[#41ad5e] text-[#ffffff] rounded px-2 ml-1 py-1">
+                  {totalProformaInvoices}
+                </span>
+              </div>
+            </div>
+            <Link to="products">
+              <div
+                style={{ boxShadow: "0 0 20px 3px #96beee26" }}
+                className="bg-white rounded-md text-center py-7"
+              >
+                <h1 className="flex items-center justify-center gap-2 text-xl border-b font-bold pb-4 text-[#22075e]">
+                  Total Products
+                  <MdKeyboardArrowRight size={25} />
+                  {/* {!productDropdown && (
+                  <FaChevronDown onClick={() => setProductDropdown(true)} />
+                )}
+                {productDropdown && (
+                  <FaChevronUp onClick={() => setProductDropdown(false)} />
+                )} */}
+                </h1>
+                <div className="mt-4 font-bold text-[#595959]">
+                  All Time
+                  <span className="bg-[#0095ff] text-[#ffffff] rounded px-2 ml-1 py-1">
+                    {products.length}
+                  </span>
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-2 gap-x-2">
+            {/* <Link to="products-category"><div
+              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
+              className="bg-white rounded-md text-center py-7"
+            >
+              <h1 className="flex items-center justify-center gap-2 text-xl border-b pb-4 font-bold text-[#22075e]">
+                Total Categories
+                <MdKeyboardArrowRight size={25} />
+              </h1>
+              <div className="mt-4 font-bold text-[#595959]">
+                All Time
+                <span className="bg-[#0095ff] text-[#ffffff] rounded px-2 ml-1 py-1">
+                  {categories.length}
+                </span>
+              </div>
+            </div></Link> */}
           </div>
 
           <div className="mt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-2 gap-x-2">
