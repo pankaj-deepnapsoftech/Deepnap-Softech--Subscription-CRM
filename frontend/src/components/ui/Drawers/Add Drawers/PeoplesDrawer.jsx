@@ -103,11 +103,11 @@ const PeoplesDrawer = ({closeDrawerHandler, fetchAllPeople}) => {
 
         <form onSubmit={addPeopleHandler}>
           <FormControl className="mt-3 mb-5" isRequired>
-            <FormLabel fontWeight="bold">Firstname</FormLabel>
+            <FormLabel fontWeight="bold">First Name</FormLabel>
             <Input value={firstname} onChange={(e)=>setFirstname(e.target.value)} type="text" placeholder="Firstname" />
           </FormControl>
           <FormControl className="mt-3 mb-5" isRequired>
-            <FormLabel fontWeight="bold">Lastname</FormLabel>
+            <FormLabel fontWeight="bold">Last Name</FormLabel>
             <Input value={lastname} onChange={(e)=>setLastname(e.target.value)} type="text" placeholder="Lastname" />
           </FormControl>
           <FormControl className="mt-2 mb-5">

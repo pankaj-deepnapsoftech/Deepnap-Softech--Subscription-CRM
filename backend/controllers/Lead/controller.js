@@ -31,7 +31,7 @@ const createLead = TryCatch(async (req, res) => {
     followup_date,
     followup_reason,
     location,
-    prc_qt
+    prc_qt,
   } = req.body;
 
   const websiteCofiguration = await websiteConfigurationModel
@@ -71,7 +71,7 @@ const createLead = TryCatch(async (req, res) => {
       followup_date,
       followup_reason,
       prc_qt,
-      location
+      location,
     });
     lead = await leadModel.findById(lead._id).populate("products");
 
@@ -89,9 +89,7 @@ const createLead = TryCatch(async (req, res) => {
           products,
         });
       }
-    } else if (
-      status === "Follow Up"
-    ) {
+    } else if (status === "Follow Up") {
       const date = new Date();
       const followupDate = new Date(lead?.followup_date);
       if (
@@ -263,7 +261,7 @@ const createLead = TryCatch(async (req, res) => {
       followup_date,
       followup_reason,
       prc_qt,
-      location
+      location,
     });
     lead = await leadModel.findById(lead._id).populate("products");
 
@@ -282,9 +280,7 @@ const createLead = TryCatch(async (req, res) => {
           products,
         });
       }
-    } else if (
-      status === "Follow Up"
-    ) {
+    } else if (status === "Follow Up") {
       const date = new Date();
       const followupDate = new Date(lead?.followup_date);
       if (
@@ -383,7 +379,7 @@ const createLead = TryCatch(async (req, res) => {
                                         <p>Let’s succeed together!</p>
                                         <br>
                                         <p>Best regards,</p>
-                                        <p>The ${organization?.company} Team</>`;
+                                        <p>The ${organization?.company} Team</p>`;
 
       sendBusinessEmail(
         isExistingCompany?.email,
@@ -444,7 +440,7 @@ const editLead = TryCatch(async (req, res) => {
     followup_date,
     followup_reason,
     prc_qt,
-    location
+    location,
   } = req.body;
 
   const isExistingLead = await leadModel
@@ -481,7 +477,15 @@ const editLead = TryCatch(async (req, res) => {
         { _id: leadId },
         {
           $unset: { followup_date: "", followup_reason: "" },
-          $set: { creator: assigned, status: status, assigned, notes, source, prc_qt, location },
+          $set: {
+            creator: assigned,
+            status: status,
+            assigned,
+            notes,
+            source,
+            prc_qt,
+            location,
+          },
         },
         { new: true }
       )
@@ -512,8 +516,10 @@ const editLead = TryCatch(async (req, res) => {
     );
   } else if (
     status === "Follow Up" &&
-    new Date(followup_date).toLocaleDateString() ===
-      new Date().toLocaleDateString()
+    followup_date &&
+    followup_reason
+    // new Date(followup_date).toLocaleDateString() ===
+    //   new Date().toLocaleDateString()
   ) {
     updatedLead = await leadModel
       .findOneAndUpdate(
@@ -527,7 +533,7 @@ const editLead = TryCatch(async (req, res) => {
             notes,
             source,
             prc_qt,
-            location
+            location,
           },
         },
         { new: true }
@@ -891,20 +897,22 @@ const allLeads = TryCatch(async (req, res) => {
       _id: lead._id,
       name:
         lead.people !== undefined
-          ? lead.people.firstname + " " + (lead.people.lastname || "")
-          : lead.company.companyname,
+          ? lead?.people?.firstname + " " + (lead?.people?.lastname || "")
+          : lead?.company?.companyname,
       status: lead.status,
-      email: lead.people !== undefined ? lead.people.email : lead.company.email,
-      phone: lead.people !== undefined ? lead.people.phone : lead.company.phone,
+      email:
+        lead.people !== undefined ? lead?.people?.email : lead?.company?.email,
+      phone:
+        lead.people !== undefined ? lead?.people?.phone : lead?.company?.phone,
       source: lead.source,
       leadtype: lead.leadtype,
       assigned: lead?.assigned?.name,
       followup_date: lead?.followup_date,
       followup_reason: lead?.followup_reason,
-      creator: lead?.creator.name,
+      creator: lead?.creator?.name,
       createdAt: lead?.createdAt,
       location: lead?.location,
-      prc_qt: lead?.prc_qt
+      prc_qt: lead?.prc_qt,
     };
   });
 
@@ -944,11 +952,13 @@ const assignedLeads = TryCatch(async (req, res) => {
       _id: lead._id,
       name:
         lead.people !== undefined
-          ? lead.people.firstname + " " + lead.people.lastname
+          ? lead.people.firstname + " " + (lead?.people?.lastname || "")
           : lead.company.companyname,
       status: lead.status,
-      email: lead.people !== undefined ? lead.people.email : lead.company.email,
-      phone: lead.people !== undefined ? lead.people.phone : lead.company.phone,
+      email:
+        lead.people !== undefined ? lead?.people.email : lead?.company?.email,
+      phone:
+        lead.people !== undefined ? lead?.people?.phone : lead?.company?.phone,
       source: lead.source,
       leadtype: lead.leadtype,
       assigned: lead?.assigned?.name,
@@ -957,7 +967,7 @@ const assignedLeads = TryCatch(async (req, res) => {
       creator: lead?.creator?.name,
       createdAt: lead?.createdAt,
       location: lead?.location,
-      prc_qt: lead?.prc_qt
+      prc_qt: lead?.prc_qt,
     };
   });
 
@@ -1473,35 +1483,49 @@ const bulkUpload = async (req, res) => {
   // });
 };
 
-const bulkDownload = TryCatch(async (req, res)=>{
-  const leads = await leadModel.find().select("-_id -products -__v -assigned").populate("organization", "company").populate("creator", "name email phone").populate("people", "firstname lastname email phone").populate("company", "companyname email phone").lean();
+const bulkDownload = TryCatch(async (req, res) => {
+  const leads = await leadModel
+    .find()
+    .select("-_id -products -__v -assigned")
+    .populate("organization", "company")
+    .populate("creator", "name email phone")
+    .populate("people", "firstname lastname email phone")
+    .populate("company", "companyname email phone")
+    .lean();
 
-  let processedLeads = leads.map(lead => {
+  let processedLeads = leads.map((lead) => {
     return {
       ...lead,
-      organization: lead.organization.company || 'N/A',
+      organization: lead.organization.company || "N/A",
       creator: undefined,
-      creator_name: lead.creator.name || 'N/A',
-      creator_email: lead.creator.email || 'N/A',
-      people: lead?.people ? (lead?.people?.firstname + ' ' + (lead?.people?.lastname || '')) : 'N/A',
+      creator_name: lead?.creator?.name || "N/A",
+      creator_email: lead?.creator?.email || "N/A",
+      people: lead?.people
+        ? lead?.people?.firstname + " " + (lead?.people?.lastname || "")
+        : "N/A",
       // people_firstname: lead?.people?.firstname || 'N/A',
       // people_lastname: lead?.people?.lastname || 'N/A',
-      people_email: lead?.people?.email || 'N/A',
-      people_phone: lead?.people?.phone || 'N/A',
-      company: lead?.company?.companyname || 'N/A',
-      company_email: lead?.company?.email || 'N/A',
-      company_phone: lead?.company?.phone || 'N/A',
+      people_email: lead?.people?.email || "N/A",
+      people_phone: lead?.people?.phone || "N/A",
+      company: lead?.company?.companyname || "N/A",
+      company_email: lead?.company?.email || "N/A",
+      company_phone: lead?.company?.phone || "N/A",
       createdAt: new Date(lead?.createdAt).toLocaleDateString(),
       updatedAt: new Date(lead?.updatedAt).toLocaleDateString(),
-      followup_date: lead.followup_date ? new Date(lead.followup_date).toLocaleDateString() : undefined
-    }
+      followup_date: lead.followup_date
+        ? new Date(lead.followup_date).toLocaleDateString()
+        : undefined,
+    };
   });
 
   const csv = parse(processedLeads);
-  res.setHeader('Content-Type', 'text/csv');
-  res.setHeader('Content-Disposition', `attachment; filename="Leads-${Date.now()}.csv"`);
+  res.setHeader("Content-Type", "text/csv");
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename="Leads-${Date.now()}.csv"`
+  );
   res.status(200).send(csv);
-})
+});
 
 const checkDataValidity = async (data) => {
   for (item of data) {
@@ -1679,5 +1703,5 @@ module.exports = {
   leadSummary,
   bulkUpload,
   bulkAssign,
-  bulkDownload
+  bulkDownload,
 };

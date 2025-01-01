@@ -60,11 +60,11 @@ const columns = [
     accessor: "created_on",
   },
   {
-    Header: "Firstname",
+    Header: "First Name",
     accessor: "firstname",
   },
   {
-    Header: "Lastname",
+    Header: "Last Name",
     accessor: "lastname",
   },
   {

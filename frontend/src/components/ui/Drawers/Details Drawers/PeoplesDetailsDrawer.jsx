@@ -69,11 +69,11 @@ const PeoplesDetailsDrawer = ({dataId: id, closeDrawerHandler})=>{
         {!isLoading && (
           <div>
             <div className="mt-3 mb-5 font-bold">
-              <p>Firstname</p>
+              <p>First Name</p>
               <p className="font-normal">{details?.firstname ? details.firstname : 'Not Available'}</p>
             </div>
             <div className="mt-3 mb-5 font-bold">
-              <p>Lastname</p>
+              <p>Last Name</p>
               <p className="font-normal">{details?.lastname ? details.lastname : 'Not Available'}</p>
             </div>
             {/* <div className="mt-3 mb-5 font-bold">
