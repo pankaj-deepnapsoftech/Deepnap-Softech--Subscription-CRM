@@ -655,64 +655,6 @@ const Dashboard = () => {
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-2 gap-x-2">
-            <div
-              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
-              className="bg-white rounded-md text-center py-7"
-            >
-              <h1 className="text-xl border-b font-bold pb-4 text-[#22075e]">
-                Offers
-              </h1>
-              <div className="mt-4 font-bold text-[#595959]">
-                {/* This Month */}
-                <span className="bg-[#ff8b46] text-[#ffffff] rounded px-2 ml-1 py-1">
-                  Rs {totalOfferAmount.toFixed(2)}
-                </span>
-              </div>
-            </div>
-            <div
-              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
-              className="bg-white rounded-md text-center py-7"
-            >
-              <h1 className="text-xl border-b pb-4 font-bold text-[#22075e]">
-                Invoices
-              </h1>
-              <div className="mt-4 font-bold font-bold text-[#595959]">
-                {/* This Month */}
-                <span className="bg-[#0095ff] text-[#ffffff] rounded px-2 ml-1 py-1">
-                  Rs {totalInvoiceAmount.toFixed(2)}
-                </span>
-              </div>
-            </div>
-            <div
-              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
-              className="bg-white rounded-md text-center py-7"
-            >
-              <h1 className="text-xl border-b pb-4 font-bold text-[#22075e]">
-                Unpaid Invoices
-              </h1>
-              <div className="mt-4 font-bold text-[#595959]">
-                {/* This Month */}
-                <span className="bg-[#ff6565] text-[#ffffff] rounded px-2 ml-1 py-1">
-                  Rs {totalUnpaidInvoiceAmount.toFixed(2)}
-                </span>
-              </div>
-            </div>
-
-            <div
-              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
-              className="bg-white rounded-md text-center py-7"
-            >
-              <h1 className="text-xl border-b font-bold pb-4 text-[#22075e]">
-                Proforma Invoices
-              </h1>
-              <div className="mt-4 font-bold text-[#595959]">
-                {/* This Month */}
-                <span className="bg-[#41ad5e] text-[#ffffff] rounded px-2 ml-1 py-1">
-                  Rs {totalProformaInvoiceAmount.toFixed(2)}
-                </span>
-              </div>
-            </div>
-
             <Link to="admins">
               <div
                 style={{ boxShadow: "0 0 20px 3px #96beee26" }}
@@ -721,12 +663,6 @@ const Dashboard = () => {
                 <h1 className="flex items-center justify-center gap-2 text-xl border-b font-bold pb-4 text-[#22075e]">
                   Total Employees
                   <MdKeyboardArrowRight size={25} />
-                  {/* {!productDropdown && (
-                  <FaChevronDown onClick={() => setProductDropdown(true)} />
-                )}
-                {productDropdown && (
-                  <FaChevronUp onClick={() => setProductDropdown(false)} />
-                )} */}
                 </h1>
                 <div className="mt-4 font-bold text-[#595959]">
                   All Time
@@ -745,12 +681,6 @@ const Dashboard = () => {
                 <h1 className="flex items-center justify-center gap-2 text-xl border-b font-bold pb-4 text-[#22075e]">
                   Total Individuals
                   <MdKeyboardArrowRight size={25} />
-                  {/* {!productDropdown && (
-                  <FaChevronDown onClick={() => setProductDropdown(true)} />
-                )}
-                {productDropdown && (
-                  <FaChevronUp onClick={() => setProductDropdown(false)} />
-                )} */}
                 </h1>
                 <div className="mt-4 font-bold text-[#595959]">
                   All Time
@@ -768,12 +698,6 @@ const Dashboard = () => {
                 <h1 className="flex items-center justify-center gap-2 text-xl border-b font-bold pb-4 text-[#22075e]">
                   Total Corporates
                   <MdKeyboardArrowRight size={25} />
-                  {/* {!productDropdown && (
-                  <FaChevronDown onClick={() => setProductDropdown(true)} />
-                )}
-                {productDropdown && (
-                  <FaChevronUp onClick={() => setProductDropdown(false)} />
-                )} */}
                 </h1>
                 <div className="mt-4 font-bold text-[#595959]">
                   All Time
@@ -792,12 +716,6 @@ const Dashboard = () => {
                 <h1 className="flex items-center justify-center gap-2 text-xl border-b font-bold pb-4 text-[#22075e]">
                   Total Leads
                   <MdKeyboardArrowRight size={25} />
-                  {/* {!productDropdown && (
-                  <FaChevronDown onClick={() => setProductDropdown(true)} />
-                )}
-                {productDropdown && (
-                  <FaChevronUp onClick={() => setProductDropdown(false)} />
-                )} */}
                 </h1>
                 <div className="mt-4 font-bold text-[#595959]">
                   All Time
@@ -817,12 +735,6 @@ const Dashboard = () => {
               <h1 className="flex items-center justify-center gap-2 text-xl border-b font-bold pb-4 text-[#22075e]">
                 Follow-Up Leads
                 <MdKeyboardArrowRight size={25} />
-                {/* {!followupDropdown && (
-                  <FaChevronDown onClick={() => setFollowupDropdown(true)} />
-                )}
-                {followupDropdown && (
-                  <FaChevronUp onClick={() => setFollowupDropdown(false)} />
-                )} */}
               </h1>
               <div className="mt-4 font-bold text-[#595959]">
                 {/* This Month */}
@@ -885,12 +797,68 @@ const Dashboard = () => {
               style={{ boxShadow: "0 0 20px 3px #96beee26" }}
               className="bg-white rounded-md text-center py-7"
             >
+              <h1 className="text-xl border-b font-bold pb-4 text-[#22075e]">
+                Offers
+              </h1>
+              <div className="mt-4 font-bold text-[#595959]">
+                {/* This Month */}
+                <span className="bg-[#ff8b46] text-[#ffffff] rounded px-2 ml-1 py-1">
+                  Rs {totalOfferAmount.toFixed(2)}
+                </span>
+              </div>
+            </div>
+            <div
+              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
+              className="bg-white rounded-md text-center py-7"
+            >
               <h1 className="text-xl border-b pb-4 font-bold text-[#22075e]">
                 Total Invoices
               </h1>
               <div className="mt-4 font-bold font-bold text-[#595959]">
                 <span className="bg-[#0095ff] text-[#ffffff] rounded px-2 ml-1 py-1">
                   {totalInvoices}
+                </span>
+              </div>
+            </div>
+            <div
+              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
+              className="bg-white rounded-md text-center py-7"
+            >
+              <h1 className="text-xl border-b font-bold pb-4 text-[#22075e]">
+                Total Proforma Invoices
+              </h1>
+              <div className="mt-4 font-bold text-[#595959]">
+                <span className="bg-[#41ad5e] text-[#ffffff] rounded px-2 ml-1 py-1">
+                  {totalProformaInvoices}
+                </span>
+              </div>
+            </div>
+
+            <div
+              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
+              className="bg-white rounded-md text-center py-7"
+            >
+              <h1 className="text-xl border-b font-bold pb-4 text-[#22075e]">
+                Proforma Invoices
+              </h1>
+              <div className="mt-4 font-bold text-[#595959]">
+                {/* This Month */}
+                <span className="bg-[#41ad5e] text-[#ffffff] rounded px-2 ml-1 py-1">
+                  Rs {totalProformaInvoiceAmount.toFixed(2)}
+                </span>
+              </div>
+            </div>
+            <div
+              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
+              className="bg-white rounded-md text-center py-7"
+            >
+              <h1 className="text-xl border-b pb-4 font-bold text-[#22075e]">
+                Invoices
+              </h1>
+              <div className="mt-4 font-bold font-bold text-[#595959]">
+                {/* This Month */}
+                <span className="bg-[#0095ff] text-[#ffffff] rounded px-2 ml-1 py-1">
+                  Rs {totalInvoiceAmount.toFixed(2)}
                 </span>
               </div>
             </div>
@@ -908,17 +876,17 @@ const Dashboard = () => {
                 </span>
               </div>
             </div>
-
             <div
               style={{ boxShadow: "0 0 20px 3px #96beee26" }}
               className="bg-white rounded-md text-center py-7"
             >
-              <h1 className="text-xl border-b font-bold pb-4 text-[#22075e]">
-                Total Proforma Invoices
+              <h1 className="text-xl border-b pb-4 font-bold text-[#22075e]">
+                Unpaid Invoices
               </h1>
               <div className="mt-4 font-bold text-[#595959]">
-                <span className="bg-[#41ad5e] text-[#ffffff] rounded px-2 ml-1 py-1">
-                  {totalProformaInvoices}
+                {/* This Month */}
+                <span className="bg-[#ff6565] text-[#ffffff] rounded px-2 ml-1 py-1">
+                  Rs {totalUnpaidInvoiceAmount.toFixed(2)}
                 </span>
               </div>
             </div>
@@ -948,39 +916,6 @@ const Dashboard = () => {
           </div>
 
           <div className="mt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-2 gap-x-2">
-            {/* <Link to="products-category"><div
-              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
-              className="bg-white rounded-md text-center py-7"
-            >
-              <h1 className="flex items-center justify-center gap-2 text-xl border-b pb-4 font-bold text-[#22075e]">
-                Total Categories
-                <MdKeyboardArrowRight size={25} />
-              </h1>
-              <div className="mt-4 font-bold text-[#595959]">
-                All Time
-                <span className="bg-[#0095ff] text-[#ffffff] rounded px-2 ml-1 py-1">
-                  {categories.length}
-                </span>
-              </div>
-            </div></Link> */}
-          </div>
-
-          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-2 gap-x-2">
-            {/* <Link to="products-category"><div
-              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
-              className="bg-white rounded-md text-center py-7"
-            >
-              <h1 className="flex items-center justify-center gap-2 text-xl border-b pb-4 font-bold text-[#22075e]">
-                Total Categories
-                <MdKeyboardArrowRight size={25} />
-              </h1>
-              <div className="mt-4 font-bold text-[#595959]">
-                All Time
-                <span className="bg-[#0095ff] text-[#ffffff] rounded px-2 ml-1 py-1">
-                  {categories.length}
-                </span>
-              </div>
-            </div></Link> */}
             <div
               onClick={() =>
                 navigate("support", { state: { searchKey: "New" } })
@@ -991,12 +926,6 @@ const Dashboard = () => {
               <h1 className="flex items-center justify-center gap-2 text-xl border-b font-bold pb-4 text-[#22075e]">
                 New Queries
                 <MdKeyboardArrowRight size={25} />
-                {/* {!productDropdown && (
-                  <FaChevronDown onClick={() => setProductDropdown(true)} />
-                )}
-                {productDropdown && (
-                  <FaChevronUp onClick={() => setProductDropdown(false)} />
-                )} */}
               </h1>
               <div className="mt-4 font-bold text-[#595959]">
                 <span className="bg-[#41ad5e] text-[#ffffff] rounded px-2 ml-1 py-1">
@@ -1014,12 +943,6 @@ const Dashboard = () => {
               <h1 className="flex items-center justify-center gap-2 text-lg border-b font-bold pb-4 text-[#22075e]">
                 Under Process Queries
                 <MdKeyboardArrowRight size={25} />
-                {/* {!followupDropdown && (
-                  <FaChevronDown onClick={() => setFollowupDropdown(true)} />
-                )}
-                {followupDropdown && (
-                  <FaChevronUp onClick={() => setFollowupDropdown(false)} />
-                )} */}
               </h1>
               <div className="mt-4 font-bold text-[#595959]">
                 {/* This Month */}

@@ -24,6 +24,7 @@ import { useCookies } from "react-cookie";
 import Loading from "../ui/Loading";
 import { FcDatabase } from "react-icons/fc";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
+import moment from 'moment';
 
 import {
   Table,
@@ -62,6 +63,10 @@ const columns = [
   {
     Header: "Verified",
     accessor: "verified",
+  },
+  {
+    Header: "Joining Date",
+    accessor: "createdAt",
   },
 ];
 
@@ -397,8 +402,9 @@ const Admins = () => {
                                     fontWeight="600"
                                     {...cell.getCellProps()}
                                   >
-                                    {cell.column.id !== 'verified' && cell.render("Cell")}
+                                    {cell.column.id !== 'verified' && cell.column.id !== 'createdAt' && cell.render("Cell")}
                                     {cell.column.id === 'verified' && (row.original.verified ? <span className="text-sm rounded-md px-3 py-1 bg-[#2d7a24] text-white">Verified</span> : <span className="text-sm rounded-md px-3 py-1 bg-[#ff4d4d] text-white">Not Verified</span>)}
+                                    {cell.column.id === 'createdAt' && <span>{moment(row.original.createdAt).format('DD/MM/YYYY')}</span>}
                                   </Td>
                                 );
                               })}
